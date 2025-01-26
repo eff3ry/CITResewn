@@ -66,36 +66,7 @@ if (stonecutter.current.isActive) {
     plugins.apply 'com.modrinth.minotaur'
     plugins.apply 'com.matthewprenger.cursegradle'
 
-    modrinth {
-        token = TOKEN_MODRINTH
-        projectId = property('publish.modrinth.id')
-        uploadFile = remapJar
-        changelog = java.nio.file.Files.readString(rootProject.file("Changelog.md").toPath())
-        versionNumber = version
-        versionName = "v" + version
-        versionType = 'beta'
-        additionalFiles = [sourcesJar.outputs.getFiles().singleFile]
-        gameVersions = Arrays.asList(property('publish.target-mc').split(","))
-    }
 
-    curseforge {
-        apiKey = TOKEN_CURSEFORGE
-        project {
-            id = property('publish.curseforge.id')
-            changelogType = 'markdown'
-            changelog = rootProject.file('Changelog.md')
-            releaseType = 'beta'
-            mainArtifact(remapJar) {
-                displayName = "v" + version
-            }
-            addGameVersion 'Fabric'
-            for (String version : property('publish.target-mc').split(","))
-                addGameVersion version
-        }
-        options {
-            forgeGradleIntegration = false
-        }
-    }
 
     rootProject.tasks.register('publishActive') {
         setGroup 'project'
